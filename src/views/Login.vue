@@ -2,14 +2,19 @@
   <div class="container">
     <h2>Ingresar</h2>
     <form class="container" @submit.prevent="procesarFormulario()">
+      <div v-if="error.tipo !== null" class="alert alert-danger">
+        {{ error.mensaje }}
+      </div>
       <input
         class="form-control form-texto mb-5"
+        :class="[error.tipo === 'email' ? 'is-invalid' : '']"
         type="email"
         placeholder="Escribe tu Email"
         v-model.trim="email"
       />
       <input
         class="form-control form-texto mb-5"
+        :class="[error.tipo === 'password' ? 'is-invalid' : '']"
         type="password"
         placeholder="Escribe tu Contraseña"
         v-model.trim="password"
@@ -26,7 +31,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   data() {
@@ -36,6 +41,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["error"]),
     bloquear() {
       if (!this.email.includes("@")) {
         return true;
@@ -49,8 +55,11 @@ export default {
   },
   methods: {
     ...mapActions(["ingresoUsuario"]),
-    procesarFormulario() {
-      this.ingresoUsuario({ email: this.email, password: this.password });
+    async procesarFormulario() {
+      await this.ingresoUsuario({ email: this.email, password: this.password });
+      if (this.error.tipo !== null) {
+        return;
+      }
       this.email = "";
       this.password = "";
     },
