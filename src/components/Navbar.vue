@@ -3,7 +3,7 @@
     <div class="container">
       <router-link to="/">
         <img src="../assets/logo.png" alt="Things To Do" />
-        <h1>{{ usuarioAutenticado ? "Welcome" : "..." }}</h1>
+        <h1>{{ usuarioAutenticado ? "Welcome" : "." }}</h1>
       </router-link>
       <button
         v-if="usuarioAutenticado"
